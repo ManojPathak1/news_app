@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'dart:async';
-
+import 'dart:convert';
 import 'package:http/http.dart' as http;
 
 void main() => runApp(new MyApp());
@@ -15,42 +15,81 @@ class MyApp extends StatelessWidget {
         ),
         home: new Scaffold(
             appBar: new AppBar(title: new Text("News")),
-            body: ViewPagerTemplate()));
+            body: FutureBuilder<List>(
+              future: fetchNews(),
+              builder: (context, snapshot) {
+                if (snapshot.hasData) {
+                  return ViewPagerTemplate(articles: snapshot.requireData);
+                }
+                return Loader();
+              },
+            )));
   }
 }
 
 class ViewPagerTemplate extends StatelessWidget {
+  final List articles;
+  ViewPagerTemplate({this.articles});
   @override
   Widget build(BuildContext context) {
     return new Container(
-      child: new PageView.builder(
-          scrollDirection: Axis.vertical,
-          reverse: false,
-          controller: PageController(viewportFraction: 1.0),
-          itemCount: 10,
-          physics: ScrollPhysics(),
-          pageSnapping: true,
-          itemBuilder: (BuildContext context, int index) {
-            return Text("Hello $index");
-          },
-      )
-      );
+        child: new PageView.builder(
+      scrollDirection: Axis.vertical,
+      reverse: false,
+      controller: PageController(viewportFraction: 1.0),
+      itemCount: this.articles.length,
+      physics: ScrollPhysics(),
+      pageSnapping: true,
+      itemBuilder: (BuildContext context, int index) {
+        return NewsTemplate(article: this.articles[index]);
+      },
+    ));
   }
 
-  void pageViewController() {
-
-  }
+  void pageViewController() {}
 }
 
 class NewsTemplate extends StatelessWidget {
+  final Article article;
+  NewsTemplate({this.article});
   @override
   Widget build(BuildContext context) {
+    final Widget assetImage = new Container(
+      height: 200.0,
+      decoration: new BoxDecoration(
+        color: const Color(0xff7c94b6),
+        image: new DecorationImage(
+          image: new AssetImage('images/default.jpg'),
+          fit: BoxFit.cover,
+        )
+      ),
+    );
+    final Widget imageWidget = (this.article.urlToImage != null)
+        ? Image.network(this.article.urlToImage, height: 250.0, fit: BoxFit.cover)
+        : assetImage;
+    final String text =
+        (this.article.description != null) ? this.article.description : "";
+    final String title = this.article.title;
     return new Column(
       children: <Widget>[
-        Image.network(
-            'https://raw.githubusercontent.com/flutter/website/master/_includes/code/layout/lakes/images/lake.jpg'),
-        new Text(
-            "Vespa launches all-new limited-edition black scooter, Vespa Notte at a special introductory price. Also, avail ₹10,000 worth benefits on Notte & the whole Vespa and Aprilia range. The benefits include free insurance, free accessory, free RSA in addition to Paytm Mall benefits up to ₹5000* or zero cost EMI* or low down payment of ₹3999*")
+        imageWidget,
+        Container(
+            child: Column(
+              children: <Widget>[
+                Text(title,
+                    style: TextStyle(
+                        fontFamily: 'RobotoMono',
+                        fontSize: 20.0,
+                        color: Colors.black,
+                        fontWeight: FontWeight.w700)),
+                Text(text,
+                    style: TextStyle(
+                        fontFamily: 'RobotoMono',
+                        fontSize: 17.0,
+                        color: Colors.grey))
+              ],
+            ),
+            padding: EdgeInsets.all(10.0))
       ],
     );
   }
@@ -63,11 +102,19 @@ class Loader extends StatelessWidget {
   }
 }
 
-Future<Post> fetchPost() async {
+List<Article> compute(String body) {
+  final articleList = json.decode(body);
+  var a = articleList['articles'];
+  var article = a.map<Article>((article) => Article.fromJson(article)).toList();
+  return article;
+}
+
+Future<List<Article>> fetchNews() async {
   final response = await http.get(
       'https://newsapi.org/v2/top-headlines?country=us&category=business&apiKey=1272e100399c44bfbe91b64998809de0');
 
   if (response.statusCode == 200) {
+    return compute(response.body);
     // If the call to the server was successful, parse the JSON
   } else {
     // If that call was not successful, throw an error.
@@ -78,18 +125,7 @@ Future<Post> fetchPost() async {
 class Source {
   final String id;
   final String name;
-  Source({ this.id, this.name });
-}
-
-class ArticleList {
-  final List articleList;
-  ArticleList({ this.articleList });
-  factory ArticleList.fromJson(Map<String, dynamic> json) {
-    var articles = json['articles']['value'];
-    articles.forEach((elem) => {
-    });
-    return ArticleList();
-  }
+  Source({this.id, this.name});
 }
 
 class Article {
@@ -100,15 +136,25 @@ class Article {
   final String url;
   final String urlToImage;
   final String publishedAt;
-  Article({
-    this.source,
-    this.author,
-    this.title,
-    this.description,
-    this.url,
-    this.urlToImage,
-    this.publishedAt
-  });
+  Article(
+      {this.source,
+      this.author,
+      this.title,
+      this.description,
+      this.url,
+      this.urlToImage,
+      this.publishedAt});
+  factory Article.fromJson(Map<String, dynamic> json) {
+    var source = json["source"];
+    return Article(
+        source: new Source(id: source["id"], name: source["name"]),
+        author: json["author"],
+        title: json["title"],
+        description: json["description"],
+        url: json["url"],
+        urlToImage: json["urlToImage"],
+        publishedAt: json["publishedAt"]);
+  }
 }
 
 class Post {
