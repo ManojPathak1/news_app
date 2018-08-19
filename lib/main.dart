@@ -14,7 +14,8 @@ class MyApp extends StatelessWidget {
         theme: new ThemeData(
           primarySwatch: Colors.blue,
         ),
-        home: new Scaffold(
+        home:
+            /* new Scaffold(
             appBar: new AppBar(title: new Text("News")),
             body: FutureBuilder<List>(
               future: fetchNews(),
@@ -24,7 +25,45 @@ class MyApp extends StatelessWidget {
                 }
                 return Loader();
               },
-            )));
+            )) */
+            Categories());
+  }
+}
+
+class Categories extends StatefulWidget {
+  @override
+  CategoriesState createState() => new CategoriesState();
+}
+
+class CategoriesState extends State<Categories> {
+  final categories = ["Politics", "Entertainment"];
+  final selected = [];
+  @override
+  Widget build(BuildContext context) {
+    return new Scaffold(
+      appBar: AppBar(title: Text("Choose your categories")),
+      body: new Wrap(
+          spacing: 8.0, // gap between adjacent chips
+          runSpacing: 4.0,
+          children: buildCategories()),
+      bottomNavigationBar: ButtonBar(children: [Text("Hello")]),
+    );
+  }
+
+  List<GestureDetector> buildCategories() {
+    var list = new List<GestureDetector>();
+    categories.forEach((val) => list.add(new GestureDetector(
+        onTap: () {},
+        child: Column(children: [
+          new Container(
+            width: 80.0,
+            height: 80.0,
+            decoration:
+                new BoxDecoration(shape: BoxShape.circle, color: Colors.black),
+          ),
+          Text(val)
+        ]))));
+    return list;
   }
 }
 
@@ -50,15 +89,11 @@ class ViewPagerTemplate extends StatelessWidget {
 
 class SecondScreen extends StatelessWidget {
   final String url;
-  SecondScreen({ this.url });
+  SecondScreen({this.url});
   @override
   Widget build(BuildContext context) {
     return new WebviewScaffold(
-              appBar: new AppBar(
-                title: Text("Web View")
-              ),
-              url: this.url
-            );
+        appBar: new AppBar(title: Text("Detail")), url: this.url);
   }
 }
 
@@ -84,34 +119,35 @@ class NewsTemplate extends StatelessWidget {
         (this.article.description != null) ? this.article.description : "";
     final String title = this.article.title;
     return new GestureDetector(
-      onHorizontalDragEnd: (DragEndDetails drag) {
-        Navigator.push(
-          context,
-          MaterialPageRoute(builder: (context) => SecondScreen(url: this.article.url)),
-        );
-      },
-      child: Column(
-      children: <Widget>[
-        imageWidget,
-        Container(
-            child: Column(
-              children: <Widget>[
-                Text(title,
-                    style: TextStyle(
-                        fontFamily: 'RobotoMono',
-                        fontSize: 20.0,
-                        color: Colors.black,
-                        fontWeight: FontWeight.w700)),
-                Text(text,
-                    style: TextStyle(
-                        fontFamily: 'RobotoMono',
-                        fontSize: 17.0,
-                        color: Colors.grey))
-              ],
-            ),
-            padding: EdgeInsets.all(10.0))
-      ],
-    ));
+        onHorizontalDragEnd: (DragEndDetails drag) {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) => SecondScreen(url: this.article.url)),
+          );
+        },
+        child: Column(
+          children: <Widget>[
+            imageWidget,
+            Container(
+                child: Column(
+                  children: <Widget>[
+                    Text(title,
+                        style: TextStyle(
+                            fontFamily: 'RobotoMono',
+                            fontSize: 20.0,
+                            color: Colors.black,
+                            fontWeight: FontWeight.w700)),
+                    Text(text,
+                        style: TextStyle(
+                            fontFamily: 'RobotoMono',
+                            fontSize: 17.0,
+                            color: Colors.grey))
+                  ],
+                ),
+                padding: EdgeInsets.all(10.0))
+          ],
+        ));
   }
 }
 
