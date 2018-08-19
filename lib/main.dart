@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'dart:async';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+import 'package:flutter_webview_plugin/flutter_webview_plugin.dart';
 
 void main() => runApp(new MyApp());
 
@@ -45,8 +46,20 @@ class ViewPagerTemplate extends StatelessWidget {
       },
     ));
   }
+}
 
-  void pageViewController() {}
+class SecondScreen extends StatelessWidget {
+  final String url;
+  SecondScreen({ this.url });
+  @override
+  Widget build(BuildContext context) {
+    return new WebviewScaffold(
+              appBar: new AppBar(
+                title: Text("Web View")
+              ),
+              url: this.url
+            );
+  }
 }
 
 class NewsTemplate extends StatelessWidget {
@@ -57,20 +70,27 @@ class NewsTemplate extends StatelessWidget {
     final Widget assetImage = new Container(
       height: 200.0,
       decoration: new BoxDecoration(
-        color: const Color(0xff7c94b6),
-        image: new DecorationImage(
-          image: new AssetImage('images/default.jpg'),
-          fit: BoxFit.cover,
-        )
-      ),
+          color: const Color(0xff7c94b6),
+          image: new DecorationImage(
+            image: new AssetImage('images/default.jpg'),
+            fit: BoxFit.cover,
+          )),
     );
     final Widget imageWidget = (this.article.urlToImage != null)
-        ? Image.network(this.article.urlToImage, height: 250.0, fit: BoxFit.cover)
+        ? Image.network(this.article.urlToImage,
+            height: 250.0, fit: BoxFit.cover)
         : assetImage;
     final String text =
         (this.article.description != null) ? this.article.description : "";
     final String title = this.article.title;
-    return new Column(
+    return new GestureDetector(
+      onHorizontalDragEnd: (DragEndDetails drag) {
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => SecondScreen(url: this.article.url)),
+        );
+      },
+      child: Column(
       children: <Widget>[
         imageWidget,
         Container(
@@ -91,7 +111,7 @@ class NewsTemplate extends StatelessWidget {
             ),
             padding: EdgeInsets.all(10.0))
       ],
-    );
+    ));
   }
 }
 
