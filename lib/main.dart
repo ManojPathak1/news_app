@@ -3,14 +3,15 @@ import 'dart:async';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:flutter_webview_plugin/flutter_webview_plugin.dart';
+import 'package:location/location.dart';
 
-void main() => runApp(new MyApp());
+void main() => runApp(new App());
 
-class MyApp extends StatelessWidget {
+class App extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return new MaterialApp(
-        title: 'Flutter Demo',
+        title: 'Ramayana',
         theme: new ThemeData(
           primarySwatch: Colors.blue,
         ),
@@ -26,43 +27,209 @@ class MyApp extends StatelessWidget {
                 return Loader();
               },
             )) */
-            Categories());
+            MainApp());
+  }
+}
+
+class Location extends StatefulWidget {
+  @override
+  LocationState createState() => new LocationState();
+}
+
+class LocationState extends State<Location> {
+  Map<String, double> _startLocation;
+  Map<String, double> _currentLocation;
+  
+}
+
+class MainApp extends StatelessWidget {
+  final PageController pageController = new PageController();
+
+  @override
+  Widget build(BuildContext context) {
+    return new Scaffold(
+        body: new Container(
+            child: new PageView.builder(
+      controller: pageController,
+      physics: new NeverScrollableScrollPhysics(),
+      itemBuilder: (BuildContext context, int index) {
+        return new Content(pageController);
+      },
+    )));
+  }
+}
+
+class Content extends StatelessWidget {
+  final PageController pageController;
+  Content(this.pageController);
+  @override
+  Widget build(BuildContext context) {
+    return new Scaffold(
+        body: new Stack(
+      children: <Widget>[
+        new Container(child: new PageView.builder(
+            itemBuilder: (BuildContext context, int index) {
+          return Text("Content");
+        })),
+        new QuickNavigate()
+      ],
+    ));
+  }
+}
+
+class QuickNavigate extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return (new Container(
+      height: 100.0,
+      decoration: new BoxDecoration(
+              shape: BoxShape.rectangle,
+              color: Colors.white,
+              boxShadow: [BoxShadow(spreadRadius: 0.8, blurRadius: 0.9)]),
+              child: new Row(
+                children: <Widget>[
+                  Expanded(
+                    child: new Column(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: <Widget>[
+                        Text("Text 1"),
+                        Text("Text 2")
+                      ],
+                    )
+                  )
+                ],
+              )
+    ));
+  }
+}
+
+class Modal extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return (new Container(
+      margin: EdgeInsets.all(30.0),
+      decoration: new BoxDecoration(
+              shape: BoxShape.rectangle,
+              color: Colors.white,
+              boxShadow: [BoxShadow(spreadRadius: 0.8, blurRadius: 0.9)]),
+      child: new Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: <Widget>[
+        new Text("Select"),
+        new Expanded(
+          child: new SingleChildScrollView(
+            child: new Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                new Text("ashdjkhfkjashfjkahsdkjfh"),
+                new Text("ashdjkhfkjashfjkahsdkjfh"),
+                new Text("ashdjkhfkjashfjkahsdkjfh"),
+                new Text("ashdjkhfkjashfjkahsdkjfh"),
+                new Text("ashdjkhfkjashfjkahsdkjfh"),
+                new Text("ashdjkhfkjashfjkahsdkjfh"),
+                new Text("ashdjkhfkjashfjkahsdkjfh"),
+                new Text("ashdjkhfkjashfjkahsdkjfh"),
+                new Text("ashdjkhfkjashfjkahsdkjfh"),
+                new Text("ashdjkhfkjashfjkahsdkjfh"),
+                new Text("ashdjkhfkjashfjkahsdkjfh"),
+                new Text("ashdjkhfkjashfjkahsdkjfh"),
+                new Text("ashdjkhfkjashfjkahsdkjfh"),
+                new Text("ashdjkhfkjashfjkahsdkjfh"),
+                new Text("ashdjkhfkjashfjkahsdkjfh"),
+                new Text("ashdjkhfkjashfjkahsdkjfh"),
+                new Text("ashdjkhfkjashfjkahsdkjfh"),
+                new Text("ashdjkhfkjashfjkahsdkjfh"),
+                new Text("ashdjkhfkjashfjkahsdkjfh"),
+                new Text("ashdjkhfkjashfjkahsdkjfh"),
+                new Text("ashdjkhfkjashfjkahsdkjfh"),
+                new Text("ashdjkhfkjashfjkahsdkjfh"),
+                new Text("ashdjkhfkjashfjkahsdkjfh"),
+                new Text("ashdjkhfkjashfjkahsdkjfh"),
+                new Text("ashdjkhfkjashfjkahsdkjfh"),
+                new Text("ashdjkhfkjashfjkahsdkjfh"),
+                new Text("ashdjkhfkjashfjkahsdkjfh"),
+                new Text("ashdjkhfkjashfjkahsdkjfh"),
+                new Text("ashdjkhfkjashfjkahsdkjfh"),
+                new Text("ashdjkhfkjashfjkahsdkjfh"),
+                new Text("ashdjkhfkjashfjkahsdkjfh"),
+                new Text("ashdjkhfkjashfjkahsdkjfh"),
+                new Text("ashdjkhfkjashfjkahsdkjfh"),
+                new Text("ashdjkhfkjashfjkahsdkjfh"),
+                new Text("ashdjkhfkjashfjkahsdkjfh"),
+                new Text("ashdjkhfkjashfjkahsdkjfh"),
+                new Text("ashdjkhfkjashfjkahsdkjfh"),
+                new Text("ashdjkhfkjashfjkahsdkjfh"),
+                new Text("ashdjkhfkjashfjkahsdkjfh"),
+                new Text("ashdjkhfkjashfjkahsdkjfh"),
+                new Text("ashdjkhfkjashfjkahsdkjfh"),
+                new Text("ashdjkhfkjashfjkahsdkjfh"),
+                new Text("ashdjkhfkjashfjkahsdkjfh"),
+                new Text("ashdjkhfkjashfjkahsdkjfh"),
+                new Text("ashdjkhfkjashfjkahsdkjfh"),
+                new Text("ashdjkhfkjashfjkahsdkjfh"),
+                new Text("ashdjkhfkjashfjkahsdkjfh"),
+                new Text("ashdjkhfkjashfjkahsdkjfh"),
+              ],
+            )
+          )
+        )
+      ]),
+    ));
+  }
+}
+
+class ChooseCategories extends StatelessWidget {
+  final PageController pageController;
+  ChooseCategories(this.pageController);
+  @override
+  Widget build(BuildContext context) {
+    return new Scaffold(
+        body: new Column(
+      children: <Widget>[
+        new Text('Choose Category'),
+        Categories(pageController)
+      ],
+    ));
   }
 }
 
 class Categories extends StatefulWidget {
+  final PageController pageController;
+  Categories(this.pageController);
   @override
-  CategoriesState createState() => new CategoriesState();
+  CategoriesState createState() => new CategoriesState(pageController);
 }
 
 class CategoriesState extends State<Categories> {
-  final categories = ["Politics", "Entertainment"];
+  final categories = ["Politics", "Entertainment", "Solve", "Cast"];
   final selected = [];
+  final PageController pageController;
+  CategoriesState(this.pageController);
   @override
   Widget build(BuildContext context) {
-    return new Scaffold(
-      appBar: AppBar(title: Text("Choose your categories")),
-      body: new Wrap(
-          spacing: 8.0, // gap between adjacent chips
-          runSpacing: 4.0,
-          children: buildCategories()),
-      bottomNavigationBar: ButtonBar(children: [Text("Hello")]),
-    );
+    return new Expanded(
+        child: new SingleChildScrollView(
+            child: new Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: buildCategories())));
   }
 
   List<GestureDetector> buildCategories() {
     var list = new List<GestureDetector>();
     categories.forEach((val) => list.add(new GestureDetector(
-        onTap: () {},
-        child: Column(children: [
-          new Container(
-            width: 80.0,
-            height: 80.0,
-            decoration:
-                new BoxDecoration(shape: BoxShape.circle, color: Colors.black),
-          ),
-          Text(val)
-        ]))));
+        onTap: () {
+          pageController.animateToPage(1,
+              duration: const Duration(milliseconds: 300), curve: Curves.ease);
+        },
+        child: new Container(
+          height: 150.0,
+          margin: EdgeInsets.all(10.0),
+          decoration: new BoxDecoration(
+              shape: BoxShape.rectangle,
+              color: Colors.white,
+              boxShadow: [BoxShadow(spreadRadius: 0.8, blurRadius: 0.9)]),
+          child: new Center(child: Text("Balakanda")),
+        ))));
     return list;
   }
 }
